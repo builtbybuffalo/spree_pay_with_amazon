@@ -44,6 +44,7 @@ module Spree
     end
 
     def can_credit?(payment)
+      return true if payment.completed?
       (payment.pending? || payment.checkout?) && payment.amount < 0
     end
 
