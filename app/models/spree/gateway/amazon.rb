@@ -84,7 +84,7 @@ module Spree
         currency = order.currency
       end
 
-      response = @mws.refund(capture_id, order_id, amount / 100.00, currency)
+      response = @mws.refund(capture_id, "#{order_id}-REFUND", amount / 100.00, currency)
       return ActiveMerchant::Billing::Response.new(true, "Success", response)
     end
 
