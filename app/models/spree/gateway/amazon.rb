@@ -75,14 +75,16 @@ module Spree
         load_amazon_mws(payment.source.order_reference)
         capture_id = payment.source.capture_id
         order_id = "#{payment.order.number}-#{payment.number}"
+        currency = payment.order.currency
       else
         order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
         load_amazon_mws(order.amazon_order_reference_id)
         capture_id = order.amazon_transaction.capture_id
         order_id = gateway_options[:order_id]
+        currency = order.currency
       end
 
-      response = @mws.refund(capture_id, order_id, amount / 100.00, Spree::Config.currency)
+      response = @mws.refund(capture_id, order_id, amount / 100.00, currency)
       return ActiveMerchant::Billing::Response.new(true, "Success", response)
     end
 
